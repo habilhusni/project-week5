@@ -1,40 +1,38 @@
-var express = require('express');
-var bodyParser = require('body-parser');
-var googleMapsClient = require('@google/maps').createClient({
-  key: 'AIzaSyD5h9OsBiep0Gm_ijKxjuVZ6I89XSSagJg'
-});
-var speech = require('@google-cloud/speech')({
-  projectId: 'black-anagram-163109',
-  keyFilename: './keyfile.json'
-});
+require('dotenv').config();
+const express           = require('express');
+const bodyParser        = require('body-parser');
+const Speech            = require('@google-cloud/speech');
+const googleMapsClient  = require('@google/maps').createClient({key:process.env.MAPSCLIENT});
+const helper            = require('./helper/helper');
+const mongoose          = require('mongoose');
 
+const index             = require('./routes/index');
+const users             = require('./routes/users');
+const kota              = require('./routes/kota');
+const wisata            = require('./routes/wisata');
+
+mongoose.connect('mongodb://localhost/project_week5');
 var app = express();
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
 
-app.listen(3000)
+app.use('/', index);
+app.use('/users', users);
+app.use('/kota', kota);
+app.use('/wisata', wisata);
 
-app.use('/',function (req,res,next) {
-  googleMapsClient.geocode({
-    address: 'jalan Setiabudi no.200 bandung'
-  }, function(err, response) {
-    if (!err) {
-      res.send(response.json.results);
-    }
-  });
-});
+// app.use('/search',function (req,res,next) {
+//   helper.voice
+//   googleMapsClient.geocode({
+//     address: req.query.input
+//   }, function(err, response) {
+//     if (!err) {
+//       res.send(response.json.results);
+//     }
+//   });
+// });
+//
+// app.use('/',helper.cityFind);
 
-app.use('/sound',function (req,res,next) {
-// Detect the speech in an audio file.
-speech.recognize('./audio.raw', {
-  encoding: 'LINEAR16',
-  sampleRate: 16000
-}, function(err, transcript) {
-  res.send(transcript)
-  // transcript = 'how old is the Brooklyn Bridge'
-});
-
-});
-
-module.exports = app
+app.listen(3000);
