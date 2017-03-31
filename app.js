@@ -5,6 +5,12 @@ const Speech            = require('@google-cloud/speech');
 const googleMapsClient  = require('@google/maps').createClient({key:process.env.MAPSCLIENT});
 const helper            = require('./helper/helper');
 const mongoose          = require('mongoose');
+const passport          = require('passport');
+const Strategy          = require('passport-local').Strategy;
+const jwt               = require('jsonwebtoken');
+const passwordHash      = require('password-hash');
+
+var User                = require('./models/user');
 
 const index             = require('./routes/index');
 const users             = require('./routes/users');
@@ -22,17 +28,28 @@ app.use('/users', users);
 app.use('/kota', kota);
 app.use('/wisata', wisata);
 
-// app.use('/search',function (req,res,next) {
-//   helper.voice
-//   googleMapsClient.geocode({
-//     address: req.query.input
-//   }, function(err, response) {
-//     if (!err) {
-//       res.send(response.json.results);
-//     }
-//   });
-// });
-//
-// app.use('/',helper.cityFind);
+passport.use(new Strategy(
+	function(username, password, cb) {
+		User.findOne({ username: username }, function(err, user) {
+			if(err) res.send(err.message);
+			let isVerified = passwordHash.verify(password, user.password);
+			console.log(isVerified);
+			console.log(user.username);
+			if(user.username == username && isVerified) {
+				console.log(username);
+				cb(null, user);
+			}else {
+				cb('USERNAME AND PASSWORD NOT MATCH!')
+			}
+		});
+	}
+))
+
+app.use(passport.initialize());
+
+app.use('/login', passport.authenticate('local', { session: false }), (req,res,next) => {
+	var token = jwt.sign({username: req.user.username, role: req.user.role}, process.env.SECRETKEYS);
+    res.send(token);
+})
 
 app.listen(3000);

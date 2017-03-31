@@ -2,6 +2,7 @@
 require('dotenv').config();
 const googleMapsClient  = require('@google/maps').createClient({key:process.env.MAPSCLIENT});
 let Kota                = require('../models/kota');
+let Wisata              = require('../models/wisata');
 
 let getAll = function (req, res, next) {
   Kota.find(function (err, cities){
@@ -38,11 +39,38 @@ let deleteOne = function (req, res, next) {
   })
 };
 let find = function (req,res,next) {
-  googleMapsClient.geocode({
-    address: req.query.input
-  }, function(err, response) {
-    if (!err) {
-      res.send(response.json.results);
+  Kota.findOne({kota_name: req.query.input},function(err,kota){
+    if(err) return handleError(err);
+    // res.send(kota)
+    if(kota){
+      Wisata.find({kota:kota._id})
+      .populate('kota')
+      .exec(function(err, wisata){
+        if(err) return handleError(err);
+        mapping(wisata)
+        .then(function(wisata){
+          res.send(wisata)
+        })
+      })
+    }
+  })
+}
+
+let mapping = function (wisata) {
+  var count = 0;
+  return new Promise((resolve,reject) => {
+    for(let i=0;i<wisata.length;i++){
+      googleMapsClient.geocode({
+        address: wisata[i].address
+      }, function(err, response) {
+        if (!err) {
+          count += 1;
+          wisata[i].geoloc = JSON.stringify(response.json.results[0].geometry.location)
+        }
+        if (count == wisata.length){
+          resolve(wisata)
+        }
+      });
     }
   });
 }

@@ -7,6 +7,7 @@ let Schema = mongoose.Schema;
 let wisataSchema = new Schema({
   name: String,
   address: String,
+  geoloc: String,
   kota: {
     type: Schema.Types.ObjectId,
     ref: 'Kota' }
