@@ -4,15 +4,16 @@ const express = require('express');
 let router = express.Router();
 // let Wisata = require('../models/wisata');
 let controller = require('../controllers/wisataController');
+let aut = require('../autentikasi/auths');
 
 /* GET home page. */
-router.get('/', controller.getAll);
+router.get('/', aut.authToken, controller.getAll);
 
-router.post('/', controller.createOne);
+router.post('/', aut.authToken, controller.createOne);
 
-router.put('/:id', controller.update);
+router.put('/:id', aut.authToken, controller.update);
 
-router.delete('/:id', controller.deleteOne);
+router.delete('/:id', aut.authToken, controller.deleteOne);
 
 
 module.exports = router;
