@@ -4,7 +4,7 @@
   "description": "Travel map with voice recognition search",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha",
     "start": "nodemon app.js"
   },
   "repository": {
@@ -19,7 +19,10 @@
   "homepage": "https://github.com/arfanizar/project-week5#readme",
   "dependencies": {
     "@google-cloud/speech": "^0.7.0",
+    "@google/maps": "^0.3.1",
     "body-parser": "^1.17.1",
+    "chai": "^3.5.0",
+    "chai-http": "^3.0.0",
     "dotenv": "^4.0.0",
     "express": "^4.15.2",
     "jsonwebtoken": "^7.3.0",

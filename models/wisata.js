@@ -5,11 +5,13 @@ let Schema = mongoose.Schema;
 
 //create a Schema
 let wisataSchema = new Schema({
-  name: String,
+  name: {type: String, required: true},
   address: String,
   geoloc: String,
+  img: String,
   kota: {
     type: Schema.Types.ObjectId,
+    required: true,
     ref: 'Kota' }
 });
 
