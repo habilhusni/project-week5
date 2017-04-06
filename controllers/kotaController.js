@@ -41,7 +41,6 @@ let deleteOne = function (req, res, next) {
 let find = function (req,res,next) {
   Kota.findOne({kota_name: req.query.input},function(err,kota){
     if(err) return handleError(err);
-    // res.send(kota)
     if(kota){
       Wisata.find({kota:kota._id})
       .populate('kota')
@@ -52,6 +51,8 @@ let find = function (req,res,next) {
           res.send(wisata)
         })
       })
+    } else {
+      res.send('kota yang dicari tidak ada')
     }
   })
 }
