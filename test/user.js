@@ -229,6 +229,55 @@ describe('User Testing', () => {
         done();
       })
     })
+    it('should not update user with username not found', (done)=>{
+      chai.request('http://localhost:3000')
+      .put('/users/'+'frank')
+      .set('token', token)
+      .send({
+        email: "johna@ymail.com"
+      })
+      .end((err,res)=>{
+        // console.log('res body ', res.body);
+        res.should.have.status(200);
+        res.body.should.be.a('object');
+        res.body.should.have.property('errors');
+
+        done();
+      })
+    })
+  })
+
+  describe('DELETE /users/:username', () =>{
+    it('should delete a user', (done)=>{
+      chai.request('http://localhost:3000')
+      .delete('/users/'+'john')
+      .set('token', token)
+      .end((err,res)=>{
+          // console.log('res body ', res.body);
+          res.should.have.status(200);
+          res.body.should.be.a('object');
+          res.body.should.not.have.property('errors');
+          res.body.should.not.have.property('errmsg');
+          res.body.should.have.property('ok').eql(1);
+          res.body.should.have.property('n').eql(1);
+        done();
+      })
+    })
+    it('should not delete a user if user not found', (done)=>{
+      chai.request('http://localhost:3000')
+      .delete('/users/'+'nami')
+      .set('token', token)
+      .end((err,res)=>{
+          // console.log('res body ', res.body);
+          res.should.have.status(200);
+          res.body.should.be.a('object');
+          res.body.should.not.have.property('errors');
+          res.body.should.not.have.property('errmsg');
+          res.body.should.have.property('ok').eql(1);
+          res.body.should.have.property('n').eql(0);
+        done();
+      })
+    })
   })
 
   function generateTokenDummy(){
