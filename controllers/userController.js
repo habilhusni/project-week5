@@ -14,6 +14,9 @@ let getAll = function (req, res, next) {
   })
 };
 let createOne = function (req, res, next) {
+  if(!req.body.password) res.send({errors: {
+                                password: 'value is undefined'
+                              }});
   // Creating hash
   let hashPassword = password.generate(req.body.password);
   User.create({
@@ -24,26 +27,33 @@ let createOne = function (req, res, next) {
     phone: req.body.phone,
     role: req.body.role
   }, function (error, user){
-    if(error) throw error;
+    if(error) res.send(error);
     res.send(user);
   })
 };
+
 let update = function (req, res, next) {
   User.findOne({username: req.params.username}, function (err, user) {
-  if (err) return handleError(err);
-  // Creating hash
-  let hashPassword = password.generate(req.body.password);
+  if (err) res.send(err);
+  else if(!user) res.send({errors: 'User not found'})
 
-  user.name = req.body.name;
-  user.password = hashPassword,
-  user.email = req.body.email,
-  user.phone = req.body.phone
+  if(req.body.password){
+    // Creating hash
+    let hashPassword = password.generate(req.body.password);
+    user.password = hashPassword;
+  }
+
+  if(req.body.name) user.name = req.body.name;
+  if(req.body.email) user.email = req.body.email;
+  if(req.body.phone) user.phone = req.body.phone;
+  if(req.body.role) user.role = req.body.role;
   user.save(function (err, updatedUser) {
-    if (err) return handleError(err);
+    if (err) res.send(err);
     res.send(updatedUser);
   });
   });
 };
+
 let deleteOne = function (req, res, next) {
   User.findOne({username: req.params.username}).remove(function(err){
     res.send(err);
