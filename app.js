@@ -9,6 +9,7 @@ const passport          = require('passport');
 const Strategy          = require('passport-local').Strategy;
 const jwt               = require('jsonwebtoken');
 const passwordHash      = require('password-hash');
+const cors 							= require('cors');
 
 var User                = require('./models/user');
 
@@ -32,8 +33,10 @@ mongoose.connect(db_config[process.env.NODE_ENV], function(err,res){
   }
 });
 
+app.use(cors())
+
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended:true}));
+app.use(bodyParser.urlencoded());
 
 app.use('/', index);
 app.use('/users', users);
