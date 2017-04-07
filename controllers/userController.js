@@ -36,27 +36,29 @@ let update = function (req, res, next) {
   User.findOne({username: req.params.username}, function (err, user) {
   if (err) res.send(err);
   else if(!user) res.send({errors: 'User not found'})
+  else {
+    if(req.body.password){
+      // Creating hash
+      let hashPassword = password.generate(req.body.password);
+      user.password = hashPassword;
+    }
 
-  if(req.body.password){
-    // Creating hash
-    let hashPassword = password.generate(req.body.password);
-    user.password = hashPassword;
+    if(req.body.name) user.name = req.body.name;
+    if(req.body.email) user.email = req.body.email;
+    if(req.body.phone) user.phone = req.body.phone;
+    if(req.body.role) user.role = req.body.role;
+    user.save(function (err, updatedUser) {
+      if (err) res.send(err);
+      res.send(updatedUser);
+    });
   }
-
-  if(req.body.name) user.name = req.body.name;
-  if(req.body.email) user.email = req.body.email;
-  if(req.body.phone) user.phone = req.body.phone;
-  if(req.body.role) user.role = req.body.role;
-  user.save(function (err, updatedUser) {
-    if (err) res.send(err);
-    res.send(updatedUser);
-  });
   });
 };
 
 let deleteOne = function (req, res, next) {
-  User.findOne({username: req.params.username}).remove(function(err){
-    res.send(err);
+  User.findOne({username: req.params.username}).remove(function(err, respond){
+    if(err) res.send(err);
+    res.send(respond);
   })
 };
 
