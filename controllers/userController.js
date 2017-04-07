@@ -4,7 +4,7 @@ const password = require('password-hash');
 let User = require('../models/user');
 
 let getAll = function (req, res, next) {
-  console.log("tes");
+  // console.log("tes");
   User.find(function (err, users){
     if(err){
       res.json({error: err});
