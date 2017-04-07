@@ -22,6 +22,7 @@ let createOne = function (req, res, next) {
     res.send(user);
   })
 };
+
 let update = function (req, res, next) {
   Kota.findOne({kota_id: req.params.kota_id}, function (err, kota) {
   if (err) return handleError(err);
@@ -33,14 +34,16 @@ let update = function (req, res, next) {
   });
   });
 };
+
 let deleteOne = function (req, res, next) {
   Kota.findOne({kota_id: req.params.kota_id}).remove(function(err){
     res.send(err);
   })
 };
+
 let find = function (req,res,next) {
   Kota.findOne({kota_name: req.query.input},function(err,kota){
-    if(err) return handleError(err);
+    if(err) res.send(err);
     if(kota){
       Wisata.find({kota:kota._id})
       .populate('kota')

@@ -10,6 +10,7 @@ const Strategy          = require('passport-local').Strategy;
 const jwt               = require('jsonwebtoken');
 const passwordHash      = require('password-hash');
 const cors 							= require('cors');
+const favicon           = require('serve-favicon');
 
 var User                = require('./models/user');
 
@@ -25,11 +26,11 @@ var db_config = {
 
 var app = express();
 
-mongoose.connect(db_config[process.env.NODE_ENV], function(err,res){
+mongoose.connect(db_config.development, function(err,res){
   if(err){
     console.log('Error connecting to the database. '+ err);
   } else {
-    console.log('Connected to Database: '+ db_config[process.env.NODE_ENV]);
+    console.log('Connected to Database: '+ db_config.development);
   }
 });
 
