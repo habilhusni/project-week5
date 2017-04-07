@@ -14,10 +14,10 @@ let createOne = function (req, res, next) {
   Wisata.create({
     name: req.body.name,
     address: req.body.address,
-    kota: req.body.kota
-  }, function (error, user){
-    if(error) throw error;
-    res.send(user);
+    image: req.body.image
+  }, function (error, wisata){
+    if(error) console.log(error)
+    res.send(wisata);
   })
 };
 let update = function (req, res, next) {
