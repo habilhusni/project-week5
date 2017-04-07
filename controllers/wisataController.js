@@ -26,7 +26,7 @@ let update = function (req, res, next) {
 
   wisata.name = req.body.name,
   wisata.address = req.body.address,
-  wisata.kota = req.body.kota
+  wisata.image = req.body.image
   wisata.save(function (err, updatedWisata) {
     if (err) return handleError(err);
     res.send(updatedWisata);
