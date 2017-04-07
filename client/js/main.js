@@ -1,17 +1,17 @@
 ;(function () {
-	
+
 	'use strict';
 
 
 
-	// iPad and iPod detection	
+	// iPad and iPod detection
 	var isiPad = function(){
 		return (navigator.platform.indexOf("iPad") != -1);
 	};
 
 	var isiPhone = function(){
 	    return (
-			(navigator.platform.indexOf("iPhone") != -1) || 
+			(navigator.platform.indexOf("iPhone") != -1) ||
 			(navigator.platform.indexOf("iPod") != -1)
 	    );
 	};
@@ -35,7 +35,7 @@
 
    $('#date-start, #date-end').datepicker();
 
-   [].slice.call( document.querySelectorAll( 'select.cs-select' ) ).forEach( function(el) {  
+   [].slice.call( document.querySelectorAll( 'select.cs-select' ) ).forEach( function(el) {
       new SelectFx(el);
    } );
 
@@ -87,11 +87,11 @@
 				}
 			}
 
-		});	
+		});
 
 	}
 
-	
+
 
 	// Click outside of the Mobile Menu
 	var mobileMenuOutsideClick = function() {
@@ -113,7 +113,7 @@
 		$('.animate-box').waypoint( function( direction ) {
 
 			if( direction === 'down' && !$(this.element).hasClass('animated') ) {
-				
+
 				i++;
 
 				$(this.element).addClass('item-animate');
@@ -126,14 +126,14 @@
 							el.removeClass('item-animate');
 						},  k * 50, 'easeInOutExpo' );
 					});
-					
+
 				}, 100);
-				
+
 			}
 
 		} , { offset: '85%' } );
 	};
-	
+
 	var stickyBanner = function() {
 		var $stickyElement = $('.sticky-banner');
 		var sticky;
@@ -143,7 +143,7 @@
 		      offset: 0
 		  })
 		}
-	}; 
+	};
 
 	// Document on load.
 	$(function(){
@@ -153,6 +153,7 @@
 		mobileMenuOutsideClick();
 		contentWayPoint();
 		stickyBanner();
+		$('.currency').autoNumeric({aSign: 'Rp. '});
 	});
 
 
