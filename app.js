@@ -25,11 +25,11 @@ var db_config = {
 
 var app = express();
 
-mongoose.connect(db_config[process.env.NODE_ENV], function(err,res){
+mongoose.connect(db_config[app.settings.env], function(err,res){
   if(err){
     console.log('Error connecting to the database. '+ err);
   } else {
-    console.log('Connected to Database: '+ db_config[process.env.NODE_ENV]);
+    console.log('Connected to Database: '+ db_config[app.settings.env]);
   }
 });
 
