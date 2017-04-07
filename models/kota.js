@@ -6,7 +6,8 @@ let Schema = mongoose.Schema;
 //create a Schema
 let kotaSchema = new Schema({
   kota_id: {type: String, required: true, unique: true},
-  kota_name: String
+  kota_name: {type: String, required: true},
+  img: String
 });
 
 //the schema is useless so far

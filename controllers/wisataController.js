@@ -6,36 +6,41 @@ let getAll = function (req, res, next) {
   Wisata.find()
   .populate('kota',['kota_id','kota_name'])
   .exec(function (err, instances) {
-    if (err) return handleError(err);
-    res.send(instances);
+    if (err) res.send(err);
+    else res.send(instances);
   })
 };
 let createOne = function (req, res, next) {
   Wisata.create({
     name: req.body.name,
     address: req.body.address,
-    image: req.body.image
+    img: req.body.img,
+    kota: req.body.kota
   }, function (error, wisata){
-    if(error) console.log(error)
-    res.send(wisata);
+    if(error) res.send(error)
+    else res.send(wisata);
   })
 };
 let update = function (req, res, next) {
   Wisata.findOne({_id: req.params.id}, function (err, wisata) {
-  if (err) return handleError(err);
-
-  wisata.name = req.body.name,
-  wisata.address = req.body.address,
-  wisata.image = req.body.image
-  wisata.save(function (err, updatedWisata) {
-    if (err) return handleError(err);
-    res.send(updatedWisata);
-  });
+    if (err) res.send(err);
+    else if(!wisata) res.send({errors: 'Wisata not found'})
+    else {
+      if(req.body.name) wisata.name = req.body.name;
+      if(req.body.address) wisata.address = req.body.address;
+      if(req.body.kota) wisata.kota = req.body.kota;
+      if(req.body.img) wisata.img = req.body.img;
+      wisata.save(function (err, updatedWisata) {
+        if (err) res.send(err);
+        else res.send(updatedWisata);
+      });
+    }
   });
 };
 let deleteOne = function (req, res, next) {
-  Wisata.findOne({_id: req.params.id}).remove(function(err){
-    res.send(err);
+  Wisata.findOne({_id: req.params.id}).remove(function(err,respond){
+    if(err) res.send(err);
+    else res.send(respond);
   })
 };
 let find = function (req,res,next) {
