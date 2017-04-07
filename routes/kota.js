@@ -6,7 +6,7 @@ var helper      = require('../helper/helper');
 var aut         = require('../helper/auth');
 
 /* GET home page. */
-router.get('/', aut.authToken, controller.getAll);
+router.get('/',  controller.getAll);
 router.post('/', controller.createOne);
 router.put('/:kota_id', aut.authToken, controller.update);
 router.delete('/:kota_id', aut.authToken, controller.deleteOne);
