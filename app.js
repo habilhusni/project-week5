@@ -9,6 +9,7 @@ const passport          = require('passport');
 const Strategy          = require('passport-local').Strategy;
 const jwt               = require('jsonwebtoken');
 const passwordHash      = require('password-hash');
+const cors 							= require('cors');
 
 var User                = require('./models/user');
 
@@ -17,11 +18,25 @@ const users             = require('./routes/users');
 const kota              = require('./routes/kota');
 const wisata            = require('./routes/wisata');
 
-mongoose.connect('mongodb://localhost/project_week5');
+var db_config = {
+  development: 'mongodb://localhost/project_week5',
+  test: 'mongodb://localhost/project_week5-test'
+};
+
 var app = express();
 
+mongoose.connect(db_config[process.env.NODE_ENV], function(err,res){
+  if(err){
+    console.log('Error connecting to the database. '+ err);
+  } else {
+    console.log('Connected to Database: '+ db_config[process.env.NODE_ENV]);
+  }
+});
+
+app.use(cors())
+
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended:true}));
+app.use(bodyParser.urlencoded());
 
 app.use('/', index);
 app.use('/users', users);
