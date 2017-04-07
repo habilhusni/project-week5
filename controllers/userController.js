@@ -28,7 +28,7 @@ let createOne = function (req, res, next) {
     role: req.body.role
   }, function (error, user){
     if(error) res.send(error);
-    res.send(user);
+    else res.send(user);
   })
 };
 
@@ -49,7 +49,7 @@ let update = function (req, res, next) {
     if(req.body.role) user.role = req.body.role;
     user.save(function (err, updatedUser) {
       if (err) res.send(err);
-      res.send(updatedUser);
+      else res.send(updatedUser);
     });
   }
   });
@@ -58,7 +58,7 @@ let update = function (req, res, next) {
 let deleteOne = function (req, res, next) {
   User.findOne({username: req.params.username}).remove(function(err, respond){
     if(err) res.send(err);
-    res.send(respond);
+    else res.send(respond);
   })
 };
 
